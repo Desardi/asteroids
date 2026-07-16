@@ -11,8 +11,13 @@ def main():
     reloj: pygame = pygame.time.Clock()
     dt: float = 0.0
 
+    # Groups
+    updatable = pygame.sprite.Group()
+    drawable = pygame.sprite.Group()
+
     # Tamaño de la ventana a usar
     screen: pygame = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    Player.containers = (updatable, drawable)
     player1 = Player(x = SCREEN_WIDTH / 2, y = SCREEN_HEIGHT / 2)
 
     # Game loop
@@ -26,13 +31,14 @@ def main():
             if event.type == pygame.QUIT:
                 return
 
-        # Actualiza la posición del jugador con respecto a DeltaTime
-        player1.update(dt)
+        # Actualiza la posición de los elementos dentro del grupo updatable 
+        updatable.update(dt)
 
         # Color de la pantalla 
         screen.fill("black")
-        # Dibula al jugador en la pantalla
-        player1.draw(screen)
+        # Dibula a los objetos del grupo drawable en la pantalla
+        for obj in drawable:
+            obj.draw(screen)
 
         # Refresca la pantalla
         pygame.display.flip()
