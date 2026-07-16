@@ -1,4 +1,5 @@
 import pygame
+from player import Player
 from constants import SCREEN_WIDTH, SCREEN_HEIGHT
 from logger import log_state
 
@@ -12,6 +13,7 @@ def main():
 
     # Tamaño de la ventana a usar
     screen: pygame = pygame.display.set_mode((SCREEN_WIDTH, SCREEN_HEIGHT))
+    player1 = Player(x = SCREEN_WIDTH / 2, y = SCREEN_HEIGHT / 2)
 
     # Game loop
     while True:
@@ -25,6 +27,7 @@ def main():
                 return
         # Color de la pantalla 
         screen.fill("black")
+        player1.draw(screen)
 
         # Refresca la pantalla
         pygame.display.flip()
