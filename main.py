@@ -25,8 +25,13 @@ def main():
             # Evento para salir del loop al cerrar la ventana
             if event.type == pygame.QUIT:
                 return
+
+        # Actualiza la posición del jugador con respecto a DeltaTime
+        player1.update(dt)
+
         # Color de la pantalla 
         screen.fill("black")
+        # Dibula al jugador en la pantalla
         player1.draw(screen)
 
         # Refresca la pantalla
