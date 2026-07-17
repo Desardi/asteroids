@@ -1,9 +1,10 @@
 import pygame
+import sys
 from player import Player
 from asteroid import Asteroid
 from asteroidfield import AsteroidField
 from constants import SCREEN_WIDTH, SCREEN_HEIGHT
-from logger import log_state
+from logger import log_state, log_event
 
 def main():
     # Iniciacion de pygame
@@ -38,10 +39,16 @@ def main():
             if event.type == pygame.QUIT:
                 return
 
-        # Actualiza la posición de los elementos dentro del grupo updatable 
+        # Actualiza la posición de los elementos dentro del grupo updatable
         updatable.update(dt)
 
-        # Color de la pantalla 
+        for asteroid in asteroids:
+            if asteroid.collides_with(player):
+                log_event("player_hit")
+                print("Game over")
+                sys.exit()
+
+        # Color de la pantalla
         screen.fill("black")
         # Dibula a los objetos del grupo drawable en la pantalla
         for obj in drawable:
@@ -50,8 +57,8 @@ def main():
         # Refresca la pantalla
         pygame.display.flip()
 
-        # DeltaTime indica el tiempo entre tick para 60FPS, en milisegundos. 
-        dt = reloj.tick(60) / 1000 
+        # DeltaTime indica el tiempo entre tick para 60FPS, en milisegundos.
+        dt = reloj.tick(60) / 1000
 
 
 if __name__ == "__main__":
