@@ -1,6 +1,7 @@
 import pygame
 from constants import PLAYER_RADIUS, LINE_WIDTH, \
-                      PLAYER_TURN_SPEED, PLAYER_SPEED, PLAYER_SHOT_SPEED
+                      PLAYER_TURN_SPEED, PLAYER_SPEED, PLAYER_SHOT_SPEED, \
+                      PLAYER_SHOOT_COOLDOWN_SECONDS
 from circleshape import CircleShape
 from shot import Shot
 
@@ -8,6 +9,8 @@ from shot import Shot
 class Player(CircleShape):
     def __init__(self, x: int, y: int) -> None:
         super().__init__(x, y, PLAYER_RADIUS)
+        # CoolDown para el disparo
+        self.cd: float = 0.0
         # Usamos esta rotación para dibujar el triangulo
         self.rotation = 0
 
@@ -30,6 +33,7 @@ class Player(CircleShape):
         self.rotation += PLAYER_TURN_SPEED * dt
 
     def update(self, dt: float) -> None:
+        self.cd -= dt
         keys = pygame.key.get_pressed()
 
         if keys[pygame.K_s]:
@@ -57,7 +61,9 @@ class Player(CircleShape):
         self.position += vector_rotado_movido
 
     def shoot(self) -> None:
-        shot = Shot(self.position[0], self.position[1])
-        unit_vector = pygame.Vector2(0, 1)
-        vector_rotado = unit_vector.rotate(self.rotation)
-        shot.velocity = vector_rotado * PLAYER_SHOT_SPEED
+        if self.cd > 0:
+            return
+        self.cd = self.cd = PLAYER_SHOOT_COOLDOWN_SECONDS
+        shot = Shot(self.position.x, self.position.y)
+        shot.velocity = pygame.Vector2(0, 1).rotate(
+                                            self.rotation) * PLAYER_SHOT_SPEED
